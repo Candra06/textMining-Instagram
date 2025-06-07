@@ -1,0 +1,10 @@
+{
+   "extDesc": {
+      "description": "",
+      "message": "Ekstraheerige Instagrami kommentaare. Valige CSV- ja Excel-vormingus."
+   },
+   "extName": {
+      "description": "",
+      "message": "IG Exporter & Scraper: Ekspordi Instagrami kommentaaride andmed loendisse"
+   }
+}

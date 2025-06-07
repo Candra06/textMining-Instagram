@@ -1,0 +1,10 @@
+{
+   "extDesc": {
+      "description": "",
+      "message": "Извличане на коментари от Instagram. Изберете във формати CSV и Excel."
+   },
+   "extName": {
+      "description": "",
+      "message": "IG Export & Scraper: Експортирайте данни за коментари в Instagram в списък"
+   }
+}

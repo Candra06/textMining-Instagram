@@ -1,0 +1,10 @@
+{
+   "extDesc": {
+      "description": "",
+      "message": "Instagramコメントを抽出します。CSVおよびExcel形式で選択します。"
+   },
+   "extName": {
+      "description": "",
+      "message": "IG Exporter & Scraper: Instagramコメントデータをリストにエクスポート"
+   }
+}

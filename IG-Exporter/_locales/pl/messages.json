@@ -1,0 +1,10 @@
+{
+   "extDesc": {
+      "description": "",
+      "message": "Wyodrębnij komentarze z Instagrama. Wybierz w formatach CSV i Excel."
+   },
+   "extName": {
+      "description": "",
+      "message": "IG Exporter & Scraper: Eksportuj dane komentarzy z Instagrama do listy"
+   }
+}

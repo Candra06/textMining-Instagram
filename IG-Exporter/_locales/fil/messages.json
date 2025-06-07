@@ -1,0 +1,10 @@
+{
+   "extDesc": {
+      "description": "",
+      "message": "I-extract ang mga komento sa Instagram. Piliin sa mga format na CSV at Excel."
+   },
+   "extName": {
+      "description": "",
+      "message": "IG Exporter: I-export ang data ng mga komento sa Instagram sa listahan"
+   }
+}

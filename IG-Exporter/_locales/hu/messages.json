@@ -1,0 +1,10 @@
+{
+   "extDesc": {
+      "description": "",
+      "message": "Instagram megjegyzések kivonása. Válasszon CSV és Excel formátumban."
+   },
+   "extName": {
+      "description": "",
+      "message": "IG Exporter: Exportálja az Instagram megjegyzéseinek adatait a listára"
+   }
+}

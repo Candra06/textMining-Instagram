@@ -1,0 +1,10 @@
+{
+   "extDesc": {
+      "description": "",
+      "message": "Extreu comentaris d'Instagram. Trieu en formats CSV i Excel."
+   },
+   "extName": {
+      "description": "",
+      "message": "IG Exporter: Exporta les dades dels comentaris d'Instagram a una llista"
+   }
+}

@@ -1,0 +1,10 @@
+{
+   "extDesc": {
+      "description": "",
+      "message": "提取Instagram評論。選擇CSV和Excel格式。"
+   },
+   "extName": {
+      "description": "",
+      "message": "IG Exporter & Scraper: 將Instagram評論數據導出到列表"
+   }
+}
