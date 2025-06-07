@@ -15,4 +15,5 @@ matplotlib
 seaborn
 nltk
 joblib
-
+cryptography
+wordcloud
