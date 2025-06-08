@@ -13,13 +13,13 @@ from sqlalchemy import create_engine, Column, Integer, String, DateTime
 import io
 import base64
 import re
+import nltk
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
-import nltk
 import cryptography
 import scipy
-# from gensim import corpora
-# from gensim.models import LdaModel
+from gensim import corpora
+from gensim.models import LdaModel
 import pyLDAvis.gensim_models as gensimvis
 import pyLDAvis
 
@@ -232,7 +232,7 @@ def get_comments():
                 'comments': commentsData,
                 "allComments": allComments,
                 'wordcloud':{
-                    "positif": "data:image/png;base64," + generate_wordcloud(allComments["positif"]),
+                    "positif": "data:image/png;base64," + generate_wordcloud(str(allComments["positif"])),
                     "negatif": "data:image/png;base64," + generate_wordcloud(allComments["negatif"]),
                     "netral": "data:image/png;base64," + generate_wordcloud(allComments["netral"])
                 },
@@ -335,10 +335,9 @@ def visualize_lda(id):
     
     # Visualize the topics
     vis = gensimvis.prepare(lda_model, corpus, dictionary)
-    
+    pyLDAvis.save_html(vis, 'lda_visualisasi.html')  # buka file ini di browser
     # Render the visualization to HTML
     html = pyLDAvis.prepared_data_to_html(vis)
-    
     return html
 if __name__ == "__main__":
     app.run(debug = True)

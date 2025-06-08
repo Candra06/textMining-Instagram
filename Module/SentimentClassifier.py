@@ -27,9 +27,9 @@ import pickle
 
 warnings.filterwarnings('ignore')
 DB_USERNAME = 'root'
-DB_PASSWORD = 'Ludfyrahman123'
+DB_PASSWORD = 'bismillah5758-'
 DB_HOST = 'localhost'
-DB_NAME = 'skripsi_TI_sentimen'
+DB_NAME = 'project_skripsi_sentimen'
 # Download NLTK data (jalankan sekali saja)
 try:
     nltk.download('stopwords')
