@@ -17,11 +17,11 @@ from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 import nltk
 import cryptography
+import scipy
 # from gensim import corpora
 # from gensim.models import LdaModel
-# import pyLDAvis.gensim_models as gensimvis
-# import pyLDAvis
-
+import pyLDAvis.gensim_models as gensimvis
+import pyLDAvis
 
 try:
     nltk.data.find('tokenizers/punkt')
@@ -182,7 +182,7 @@ def get_comments():
                         else:
                             texts["netral"].append(text.strip())
                         childData = {
-                            'username': 'anonymous',
+                            'username': username,
                             "text": text.strip(),
                             'timestamp': '',
                             "likes": 0,
@@ -205,7 +205,7 @@ def get_comments():
                     else:
                         texts["netral"].append(text.strip())
                     childData = {
-                        'username': 'anonymous',
+                        'username': username,
                         "text": text.strip(),
                         'timestamp': '',
                         "likes": 0,
@@ -272,7 +272,7 @@ def get_comments():
                 if testing:
                     texts.append(text.strip())
                     childData = {
-                        'username': 'anonymous',
+                        'username': username,
                         "text": text.strip(),
                         'timestamp': '',
                         "likes": 0,
@@ -290,7 +290,7 @@ def get_comments():
                 )
                 texts.append(text.strip())
                 childData = {
-                    'username': 'anonymous',
+                    'username': username,
                     "text": text.strip(),
                     'timestamp': '',
                     "likes": 0,
