@@ -292,9 +292,27 @@
                             </div>
                         </div>
                     </div>
-                    <img src="https://via.placeholder.com/800x400.png?text=Word+Cloud+Placeholder" 
-                         class="img-fluid w-100 rounded shadow" 
-                         alt="Generated Word Cloud" id="wordCloudImage" style="display: none;">
+                    <div class="row mb-4 text-center">
+                        <div class="col-md-4">
+                            <h1>Positif</h1>
+                            <img src="https://via.placeholder.com/800x400.png?text=Word+Cloud+Placeholder" 
+                            class="img-fluid w-100 rounded shadow" 
+                            alt="Generated Word Cloud" id="wordCloudImagePositif" style="display: none;">
+                        </div>
+                        <div class="col-md-4">
+                            <h1>Negatif</h1>
+                            <img src="https://via.placeholder.com/800x400.png?text=Word+Cloud+Placeholder" 
+                            class="img-fluid w-100 rounded shadow" 
+                            alt="Generated Word Cloud" id="wordCloudImageNegatif" style="display: none;">
+                        </div>
+                        <div class="col-md-4">
+                            <h1>Netral</h1>
+                            <img src="https://via.placeholder.com/800x400.png?text=Word+Cloud+Placeholder" 
+                            class="img-fluid w-100 rounded shadow" 
+                            alt="Generated Word Cloud" id="wordCloudImageNetral" style="display: none;">
+                        </div>
+
+                    </div>
                     <!-- Comments List -->
                     <div class="mt-4">
                         <h5 class="fw-bold mb-3">
@@ -410,10 +428,14 @@
                 // Show results
                 displayResults(allComments, item.sentimens);
                 document.getElementById('resultsSection').style.display = 'block';
-                document.getElementById('wordCloudImage').style.display = 'block';
+                document.getElementById('wordCloudImagePositif').style.display = 'block';
+                document.getElementById('wordCloudImageNegatif').style.display = 'block';
+                document.getElementById('wordCloudImageNetral').style.display = 'block';
                 document.querySelector('.btn-scrape').disabled = false;
                 document.getElementById('postUrl').disabled = false;
-                document.getElementById('wordCloudImage').src = item.wordcloud || 'https://via.placeholder.com/800x400.png?text=Word+Cloud+Placeholder';
+                document.getElementById('wordCloudImagePositif').src = item.wordcloud.positif || 'https://via.placeholder.com/800x400.png?text=Word+Cloud+Placeholder';
+                document.getElementById('wordCloudImageNegatif').src = item.wordcloud.negatif || 'https://via.placeholder.com/800x400.png?text=Word+Cloud+Placeholder';
+                document.getElementById('wordCloudImageNetral').src = item.wordcloud.netral || 'https://via.placeholder.com/800x400.png?text=Word+Cloud+Placeholder';
                 // Scroll to results
                 document.getElementById('resultsSection').scrollIntoView({ 
                     behavior: 'smooth' 

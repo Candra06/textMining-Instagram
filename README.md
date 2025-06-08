@@ -59,11 +59,13 @@ Before running the program, configure the `config.json` file in the `./Modules/`
 }
 ```
 
+## 4. Run Migration <a name="usage"></a>
+#flask db upgrade
 ### Running the Program <a name="running-the-program"></a>
 
 To run the Instagram Follower and Following Scraper, execute the following command:
 ```bash
-python main.py
+python app.py
 ```
 
 The program will log in to your Instagram account, scrape the followers and following data, and store it in CSV files.

@@ -17,15 +17,24 @@ from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 import nltk
 import cryptography
+# from gensim import corpora
+# from gensim.models import LdaModel
+# import pyLDAvis.gensim_models as gensimvis
+# import pyLDAvis
+
+
 try:
     nltk.data.find('tokenizers/punkt')
 except LookupError:
     nltk.download('punkt')
 
-try:
-    nltk.data.find('corpora/stopwords')
-except LookupError:
-    nltk.download('stopwords')
+# try:
+#     nltk.data.find('corpora/stopwords')
+# except LookupError:
+nltk.download('stopwords')
+
+
+
 
 app = Flask(__name__)
 # env
@@ -73,6 +82,8 @@ class Testing(db.Model):
     # relationship with Post table
     post = db.relationship('Post', backref=db.backref('testings', lazy=True))
 
+    username = db.Column(db.String(80), nullable=True)
+
 
     # String representation of the User object
     def __repr__(self):
@@ -119,6 +130,7 @@ def generate_wordcloud(text, width=800, height=400, max_words=100, background_co
         relative_scaling=0.5,
         random_state=42
     ).generate(cleaned_text)
+
     
 
     buffer = io.BytesIO()
@@ -134,10 +146,10 @@ def get_comments():
     post_id = instat.getPostId(url)
     file = post_id+"_Comments"+'.csv'
     # check if file exists
-    if  os.path.exists("Data/"+file):
+    # if  os.path.exists("Data/"+file):
         # delete file
-        os.remove("Data/"+file)
-    instat.scrapByLink(url)
+    #     os.remove("Data/"+file)
+    # instat.scrapByLink(url)
     # check by url
     post = session.query(Post).filter_by(link=url).first()
     if post:
@@ -145,7 +157,11 @@ def get_comments():
         path = os.path.abspath("Data/"+file)
         print("File path:", path)
         commentsData = []
-        texts= [];
+        texts= {
+            "positif": [],
+            "negatif": [],
+            "netral": []
+        }
         with open(path, 'r') as f:
             comments = f.readlines()[1:]
             for comment in comments:
@@ -155,9 +171,16 @@ def get_comments():
                 try:
                     # get comment by field text
                     text = comment.split(';')[3].replace('"', '').replace("'", "")
+                    username = comment.split(';')[5].replace('"', '').replace("'", "")
+                    print("Text:", text.strip())
                     testing = session.query(Testing).filter_by(description=text.strip(), post_id=post.id).first()
                     if testing:
-                        texts.append(text.strip())
+                        if testing.category == 'Positif':
+                            texts["positif"].append(text.strip())
+                        elif testing.category == 'Negatif':
+                            texts["negatif"].append(text.strip())
+                        else:
+                            texts["netral"].append(text.strip())
                         childData = {
                             'username': 'anonymous',
                             "text": text.strip(),
@@ -172,9 +195,15 @@ def get_comments():
                     testing = Testing(
                         description=text.strip(),
                         category=category,
-                        post_id=post.id
+                        post_id=post.id,
+                        username=username
                     )
-                    texts.append(text.strip())
+                    if category == 'Positif':
+                        texts["positif"].append(text.strip())
+                    elif category == 'Negatif':
+                        texts["negatif"].append(text.strip())
+                    else:
+                        texts["netral"].append(text.strip())
                     childData = {
                         'username': 'anonymous',
                         "text": text.strip(),
@@ -190,19 +219,29 @@ def get_comments():
                     continue
             session.commit()
         print("Comments Data:", commentsData)
-        allComments = " ".join(str(x) for x in texts)
-
+        allComments = {
+            "positif": " ".join(texts["positif"]),
+            "negatif": " ".join(texts["negatif"]),
+            "netral": " ".join(texts["netral"])
+        }
+        print("All Comments:", allComments)
+        # print("WORDCLOUD:", generate_wordcloud(allComments))
         return jsonify({
             'status': 'success',
             'data': {
                 'comments': commentsData,
                 "allComments": allComments,
-                'wordcloud':"data:image/png;base64,"+ generate_wordcloud(allComments),
+                'wordcloud':{
+                    "positif": "data:image/png;base64," + generate_wordcloud(allComments["positif"]),
+                    "negatif": "data:image/png;base64," + generate_wordcloud(allComments["negatif"]),
+                    "netral": "data:image/png;base64," + generate_wordcloud(allComments["netral"])
+                },
                 'sentimens': {
                     'positif': session.query(Testing).filter_by(category='Positif', post_id=post.id).count(),
                     'negatif': session.query(Testing).filter_by(category='Negatif', post_id=post.id).count(),
                     'netral': session.query(Testing).filter_by(category='Netral', post_id=post.id).count()
-                }
+                },
+                # "lda": visualize_lda(post.id)
             }
         })
     
@@ -228,6 +267,7 @@ def get_comments():
             try:
                 # get comment by field text
                 text = comment.split(';')[3].replace('"', '').replace("'", "")
+                username = comment.split(';')[5].replace('"', '').replace("'", "")
                 testing = session.query(Testing).filter_by(description=text.strip(), post_id=post.id).first()
                 if testing:
                     texts.append(text.strip())
@@ -245,7 +285,8 @@ def get_comments():
                 testing = Testing(
                     description=text.strip(),
                     category=category,
-                    post_id=post.id
+                    post_id=post.id,
+                    username=username
                 )
                 texts.append(text.strip())
                 childData = {
@@ -264,7 +305,7 @@ def get_comments():
         session.commit()
         print("Comments Data:", commentsData)
         allComments = " ".join(str(x) for x in texts)
-
+    print("IMG BASE64:", generate_wordcloud(allComments))
     return jsonify({
         'status': 'success get data',
         'data': {
@@ -278,6 +319,26 @@ def get_comments():
                 },
         }
     })
+def visualize_lda(id):
+    """Visualize LDA topics using pyLDAvis"""
+    
 
+    # Load the data
+    texts = [word_tokenize(text) for text in session.query(Testing.description).filter_by(post_id=id).all()]
+    
+    # Create a dictionary and corpus
+    dictionary = corpora.Dictionary(texts)
+    corpus = [dictionary.doc2bow(text) for text in texts]
+    
+    # Train the LDA model
+    lda_model = LdaModel(corpus=corpus, id2word=dictionary, num_topics=3, passes=15, random_state=42)
+    
+    # Visualize the topics
+    vis = gensimvis.prepare(lda_model, corpus, dictionary)
+    
+    # Render the visualization to HTML
+    html = pyLDAvis.prepared_data_to_html(vis)
+    
+    return html
 if __name__ == "__main__":
     app.run(debug = True)
