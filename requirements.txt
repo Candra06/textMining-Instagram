@@ -6,11 +6,10 @@ Flask-SQLAlchemy >=3.1.1
 Flask-Migrate >= 4.1.0
 PyMySQL
 python-dotenv
-# numpy
+scikit-learn
 numpy
 pandas
 mysql-connector-python
-scikit-learn
 matplotlib
 seaborn
 nltk
@@ -25,8 +24,7 @@ numexpr
 funcy
 gensim
 setuptools
-pyLDAvis==3.3.1
-pypickle
-corpora
-gensim
-plotly
+# pyLDAvis==3.3.1
+# pypickle
+# corpora
+# plotly

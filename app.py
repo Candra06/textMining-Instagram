@@ -172,7 +172,7 @@ def get_comments():
                     # get comment by field text
                     text = comment.split(';')[3].replace('"', '').replace("'", "")
                     username = comment.split(';')[5].replace('"', '').replace("'", "")
-                    print("Text:", text.strip())
+                    text = SentimentClassifier().clean_text(text.strip())
                     testing = session.query(Testing).filter_by(description=text.strip(), post_id=post.id).first()
                     if testing:
                         if testing.category == 'Positif':
@@ -267,6 +267,7 @@ def get_comments():
             try:
                 # get comment by field text
                 text = comment.split(';')[3].replace('"', '').replace("'", "")
+                text = SentimentClassifier().clean_text(text.strip())
                 username = comment.split(';')[5].replace('"', '').replace("'", "")
                 testing = session.query(Testing).filter_by(description=text.strip(), post_id=post.id).first()
                 if testing:
