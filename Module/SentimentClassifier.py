@@ -451,20 +451,32 @@ class SentimentClassifier:
             'topic_probability': topic_probs[0][dominant_topic],
             'topic_keywords': top_words
         }
+    def clean_text(self, text):
+        """Fungsi untuk normalisasi teks"""
+        # cleaning text
+        text = text.lower()
+        text = re.sub(r'http\S+|www\S+|https\S+', '', text, flags=re.MULTILINE)
+        text = re.sub(r'@\w+|#\w+', '', text)
+        text = re.sub(r'[^a-zA-Z\s]', '', text)
+        text = ' '.join(text.split())
+
+        # remove emojis
+        text = re.sub(r'[^\w\s]', '', text)
+        text = re.sub(r'\d+', '', text)
+        text = text.translate(str.maketrans('', '', string.punctuation))
+        text = text.translate(str.maketrans('', '', string.digits))
+
+        # tokenization
+        tokens = word_tokenize(text)
+        # stemming & stopword removal
+        tokens = [self.stemmer.stem(token) for token in tokens
+                 if token not in self.stop_words and len(token) > 2]
+        # remove mentions
+        text = ' '.join(tokens)
+        return text
+
     def classify(self, text):
         """Fungsi untuk mengklasifikasikan teks"""
-        # Preprocessing
-        # df = self.load_data()
-        # if df is None:
-        #     print("Gagal memuat data!")
-        #     return
-        
-        # X, y, _ = self.prepare_data(df)
-        # self.train_models(X, y)
-
-        # knn_pred, knn_prob = self.predict_sentiment(text, 'knn')
-        # lda_pred, lda_prob = self.predict_sentiment(text, 'lda')
-        # return knn_pred;
 
         # Try to load existing models
         try:
