@@ -147,7 +147,7 @@ def get_comments():
     file = post_id+"_Comments"+'.csv'
     # check if file exists
     # if  os.path.exists("Data/"+file):
-        # delete file
+    #     # delete file
     #     os.remove("Data/"+file)
     # instat.scrapByLink(url)
     # check by url
@@ -241,7 +241,7 @@ def get_comments():
                     'negatif': session.query(Testing).filter_by(category='Negatif', post_id=post.id).count(),
                     'netral': session.query(Testing).filter_by(category='Netral', post_id=post.id).count()
                 },
-                # "lda": visualize_lda(post.id)
+                "lda": visualize_lda(post.id)
             }
         })
     
@@ -325,7 +325,8 @@ def visualize_lda(id):
     
 
     # Load the data
-    texts = [word_tokenize(text) for text in session.query(Testing.description).filter_by(post_id=id).all()]
+    texts_raw = session.query(Testing.description).filter_by(post_id=id).all()
+    texts = [word_tokenize(text[0]) for text in texts_raw if text[0]]  # ambil string dari tuple
     
     # Create a dictionary and corpus
     dictionary = corpora.Dictionary(texts)
