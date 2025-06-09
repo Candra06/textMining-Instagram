@@ -13,13 +13,13 @@ from sqlalchemy import create_engine, Column, Integer, String, DateTime
 import io
 import base64
 import re
+import nltk
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
-import nltk
 import cryptography
 import scipy
-# from gensim import corpora
-# from gensim.models import LdaModel
+from gensim import corpora
+from gensim.models import LdaModel
 import pyLDAvis.gensim_models as gensimvis
 import pyLDAvis
 
@@ -147,7 +147,7 @@ def get_comments():
     file = post_id+"_Comments"+'.csv'
     # check if file exists
     # if  os.path.exists("Data/"+file):
-        # delete file
+    #     # delete file
     #     os.remove("Data/"+file)
     # instat.scrapByLink(url)
     # check by url
@@ -232,7 +232,7 @@ def get_comments():
                 'comments': commentsData,
                 "allComments": allComments,
                 'wordcloud':{
-                    "positif": "data:image/png;base64," + generate_wordcloud(allComments["positif"]),
+                    "positif": "data:image/png;base64," + generate_wordcloud(str(allComments["positif"])),
                     "negatif": "data:image/png;base64," + generate_wordcloud(allComments["negatif"]),
                     "netral": "data:image/png;base64," + generate_wordcloud(allComments["netral"])
                 },
@@ -241,7 +241,7 @@ def get_comments():
                     'negatif': session.query(Testing).filter_by(category='Negatif', post_id=post.id).count(),
                     'netral': session.query(Testing).filter_by(category='Netral', post_id=post.id).count()
                 },
-                # "lda": visualize_lda(post.id)
+                "lda": visualize_lda(post.id)
             }
         })
     
@@ -325,7 +325,8 @@ def visualize_lda(id):
     
 
     # Load the data
-    texts = [word_tokenize(text) for text in session.query(Testing.description).filter_by(post_id=id).all()]
+    texts_raw = session.query(Testing.description).filter_by(post_id=id).all()
+    texts = [word_tokenize(text[0]) for text in texts_raw if text[0]]  # ambil string dari tuple
     
     # Create a dictionary and corpus
     dictionary = corpora.Dictionary(texts)
@@ -336,10 +337,9 @@ def visualize_lda(id):
     
     # Visualize the topics
     vis = gensimvis.prepare(lda_model, corpus, dictionary)
-    
+    pyLDAvis.save_html(vis, 'lda_visualisasi.html')  # buka file ini di browser
     # Render the visualization to HTML
     html = pyLDAvis.prepared_data_to_html(vis)
-    
     return html
 if __name__ == "__main__":
     app.run(debug = True)
