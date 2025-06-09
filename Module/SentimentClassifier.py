@@ -26,10 +26,10 @@ from plotly.subplots import make_subplots
 import pickle
 
 warnings.filterwarnings('ignore')
-DB_USERNAME = 'root'
-DB_PASSWORD = 'bismillah5758-'
-DB_HOST = 'localhost'
-DB_NAME = 'project_skripsi_sentimen'
+DB_USERNAME = os.environ['DATABASE_USER']
+DB_PASSWORD =  os.environ['DATABASE_PASSWORD']
+DB_HOST = os.environ['DATABASE_HOST']
+DB_NAME = os.environ['DATABASE_NAME']
 # Download NLTK data (jalankan sekali saja)
 try:
     nltk.download('stopwords')
