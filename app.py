@@ -18,8 +18,8 @@ from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 import cryptography
 import scipy
-from gensim import corpora
-from gensim.models import LdaModel
+# from gensim import corpora
+# from gensim.models import LdaModel
 import pyLDAvis.gensim_models as gensimvis
 import pyLDAvis
 
@@ -93,6 +93,10 @@ class Testing(db.Model):
 @app.route('/')
 def index():
     return render_template('frontend/index.html')
+@app.route('/lda_visualization')
+def lda_visualization():
+    """Render the LDA visualization page"""
+    return render_template('frontend/lda_visualisasi.html')
 def clean_text(text):
     """Clean and preprocess text for word cloud generation"""
     # Remove special characters and digits
@@ -337,7 +341,7 @@ def visualize_lda(id):
     
     # Visualize the topics
     vis = gensimvis.prepare(lda_model, corpus, dictionary)
-    pyLDAvis.save_html(vis, 'lda_visualisasi.html')  # buka file ini di browser
+    pyLDAvis.save_html(vis, 'Templates/frontend/lda_visualisasi.html')  # buka file ini di browser
     # Render the visualization to HTML
     html = pyLDAvis.prepared_data_to_html(vis)
     return html
